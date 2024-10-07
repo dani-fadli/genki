@@ -5,11 +5,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/info', function () {
+Route::get('/phpinfo', function () {
     return phpinfo();
 });
 
-Route::get('/ping', function () {
+Route::get('/ping-mongodb', function () {
     $connection = DB::connection('mongodb');
     $msg = 'MongoDB is accessible!';;
     try {

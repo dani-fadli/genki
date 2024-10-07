@@ -15,7 +15,8 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Validate and create a newly registered user.
      *
-     * @param  array<string, string>  $input
+     * @param array<string, string> $input
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function create(array $input): User
     {
@@ -26,10 +27,13 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
+        list($firstName, $lastName) = array_pad(explode(' ', $input['name'], 2), 2, null);
+
         return User::create([
-            'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            'first_name' => $firstName,
+            'last_name' => $lastName,
         ]);
     }
 }
