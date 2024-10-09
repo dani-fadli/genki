@@ -16,8 +16,8 @@ management using Laravel and MongoDB.
 
 ### Rubrik Penilaian:
 
-- Fungsionalitas Utama (30%): Kemampuan menampilkan katalog obat, pencarian, dan
-- sistem keranjang belanja berjalan lancar.
+- Fungsionalitas Utama (30%): Kemampuan menampilkan katalog obat, pencarian, dan sistem keranjang belanja berjalan
+  lancar.
 - Integrasi Pembayaran (20%): Implementasi payment yang aman dan efisien
 - Antarmuka Pengguna (15%): Desain yang intuitif, responsif, dan user-friendly.
 - Fitur Resep Elektronik (15%): Pengelolaan dan verifikasi resep berjalan baik.

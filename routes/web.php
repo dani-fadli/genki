@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\MedicineController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -21,20 +21,21 @@ Route::get('/ping-mongodb', function () {
 });
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+    return Inertia::render('Homepage');
+})->name('homepage');
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+Route::get('/catalogue', [MedicineController::class, 'indexCatalogue'])->name('catalogue');
+
+Route::get('/prescription', function () {
+    return Inertia::render('Prescription');
+})->name('prescription');
+
+Route::group([
+    'prefix' => 'dashboard',
+    'middleware' => ['auth:sanctum', config('jetstream.auth_session'), 'verified']
+], function () {
+    Route::get('/', fn() => Inertia::render('Dashboard'))->name('dashboard');
+
+    // Manage medicine
+    Route::resource('medicine', MedicineController::class)->names('dashboard.medicine');
 });
