@@ -11,7 +11,7 @@ Route::get('/phpinfo', function () {
 
 Route::get('/ping-mongodb', function () {
     $connection = DB::connection('mongodb');
-    $msg = 'MongoDB is accessible!';;
+    $msg = 'MongoDB is accessible!';
     try {
         $connection->command(['ping' => 1]);
     } catch (\Exception  $e) {

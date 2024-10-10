@@ -1,0 +1,66 @@
+<script setup xmlns="http://www.w3.org/1999/html">
+import {onMounted} from "vue";
+import Sidebar from "@/Components/Dashboard/Sidebar.vue";
+
+onMounted(() => {
+    const script = document.createElement('script');
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js";
+    script.async = true;
+    document.head.appendChild(script);
+});
+
+const props = defineProps({
+    title: String,
+    breadcrumbs: Array
+})
+</script>
+
+<template>
+    <Sidebar/>
+
+    <div class="p-8 sm:ml-64">
+        <!-- Page Heading -->
+        <header v-if="$slots.header" class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-2 px-4">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight my-2">
+                    {{ title }}
+                </h2>
+
+                <nav aria-label="Breadcrumb" class="flex">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                        <li class="inline-flex items-center">
+                            <a class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                               href="#">
+                                <svg aria-hidden="true" class="w-3 h-3 me-2.5" fill="currentColor"
+                                     viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                                </svg>
+                                Kelola Obat
+                            </a>
+                        </li>
+                        <li>
+                            <div class="flex items-center">
+                                <svg aria-hidden="true" class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                                     fill="none" viewBox="0 0 6 10" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="m1 9 4-4-4-4" stroke="currentColor" stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"/>
+                                </svg>
+                                <a class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
+                                   href="#">Daftar Obat</a>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </header>
+
+        <slot/>
+    </div>
+
+</template>
+
+<style scoped>
+
+</style>

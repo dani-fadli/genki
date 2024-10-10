@@ -14,7 +14,7 @@ class MedicineController extends Controller
     {
         $medicines = Medicine::all();
 
-        return inertia('Medicine/Index', [
+        return inertia('Dashboard/Medicine', [
             'medicines' => $medicines
         ]);
     }
