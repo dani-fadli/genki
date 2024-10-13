@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MedicineController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,9 @@ Route::group([
     'middleware' => ['auth:sanctum', config('jetstream.auth_session'), 'verified']
 ], function () {
     Route::get('/', fn() => Inertia::render('Dashboard'))->name('dashboard');
+
+    // Manage medicine category
+    Route::resource('category', CategoryController::class)->names('dashboard.category');
 
     // Manage medicine
     Route::resource('medicine', MedicineController::class)->names('dashboard.medicine');

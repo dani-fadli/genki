@@ -1,24 +1,16 @@
 <script setup>
 import {Head, useForm} from "@inertiajs/vue3"
-import DashboardLayout from "@/Layouts/DashboardLayout.vue"
-import {onMounted} from "vue"
+import DashboardLayout from "@/Layouts/DashboardLayout.vue";
 
-onMounted(() => {
-    const script = document.createElement('script')
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"
-    script.async = true
-    document.head.appendChild(script)
-})
-
-const title = "Kelola Obat"
-const breadcrumbs = [title, "Daftar Obat"]
+const title = "Kelola Kategori Obat"
+const breadcrumbs = [title, "Daftar Kategori Obat"]
 const props = defineProps({
-    medicines: Object
+    categories: Object
 })
-const form = useForm({})
-const deleteMedicine = (id) => {
-    form.delete(route('dashboard.medicine.destroy', id))
-}
+const form = useForm({});
+const deleteCategory = (id) => {
+    form.delete(route('dashboard.category.destroy', id));
+};
 </script>
 
 <template>
@@ -48,7 +40,7 @@ const deleteMedicine = (id) => {
                         </div>
                         <div
                             class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
-                            <a :href="route('dashboard.medicine.create')"
+                            <a :href="route('dashboard.category.create')"
                                class="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-primary-green-400 rounded-lg focus:outline-none hover:bg-primary-green-400 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                 <svg aria-hidden="true" class="w-6 h-6 text-gray-800 dark:text-white" fill="none"
                                      height="24" viewBox="0 0 24 24" width="24"
@@ -74,22 +66,19 @@ const deleteMedicine = (id) => {
                                         <label class="sr-only" for="checkbox-all">checkbox</label>
                                     </div>
                                 </th>
-                                <th class="px-4 py-3" scope="col">Nama Obat</th>
-                                <th class="px-4 py-3" scope="col">Kategori</th>
-                                <th class="px-4 py-3" scope="col">Stok</th>
-                                <th class="px-4 py-3" scope="col">Penjualan</th>
-                                <th class="px-4 py-3" scope="col">Rating</th>
+                                <th class="px-4 py-3" scope="col">Nama Kategori</th>
+                                <th class="px-4 py-3" scope="col">Jumlah Obat</th>
                                 <th class="px-4 py-3" scope="col">Pembaruan Terakhir</th>
                                 <th class="px-4 py-3" scope="col">Aksi</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-if="props.medicines.data.length === 0">
+                            <tr v-if="props.categories.data.length === 0">
                                 <td class="text-center w-full py-5" colspan="4">
                                     No Data
                                 </td>
                             </tr>
-                            <tr v-for="medicine in props.medicines.data" v-else
+                            <tr v-for="category in props.categories.data" v-else
                                 class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <td class="w-4 px-4 py-3">
                                     <div class="flex items-center">
@@ -103,43 +92,19 @@ const deleteMedicine = (id) => {
                                 <th class="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                     scope="row">
                                     <img
-                                        :src="medicine.image_urls && medicine.image_urls.length > 0 ? medicine.image_urls[0] : '/assets/default_medicine.png'"
-                                        alt="Medicine"
+                                        :src="category.image_urls && category.image_urls.length > 0 ? category.image_urls[0] : '/assets/default_category.png'"
+                                        alt="Category"
                                         class="w-auto h-8 mr-3">
-                                    {{ medicine.name }}
+                                    {{ category.name }}
                                 </th>
-                                <td class="px-4 py-2">
-                                    <span
-                                        class="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                                        {{ medicine.category?.name }}
-                                    </span>
+                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ category.total_medicines }}
                                 </td>
                                 <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <div class="flex items-center">
-                                        <div class="inline-block w-4 h-4 mr-2 bg-red-700 rounded-full"></div>
-                                        {{ medicine.stock }}
-                                    </div>
-                                </td>
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    58/hari
-                                </td>
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <div class="flex items-center">
-                                        <svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor"
-                                             viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                        </svg>
-                                        <span class="ml-1 text-gray-500 dark:text-gray-400">
-                                            {{ medicine.rating }}
-                                        </span>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ new Date(medicine.updated_at) }}
+                                    {{ new Date(category.updated_at) }}
                                 </td>
                                 <td>
-                                    <a :href="route('dashboard.medicine.edit', medicine.id)"
+                                    <a :href="route('dashboard.category.edit', category.id)"
                                        class="mr-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                         <svg aria-hidden="true" class="w-6 h-6 text-white" fill="none" height="24"
                                              viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -152,7 +117,7 @@ const deleteMedicine = (id) => {
                                     <button
                                         class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-1.5 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800"
                                         type="button"
-                                        @click="deleteMedicine(medicine.id)">
+                                        @click="deleteCategory(category.id)">
                                         <svg aria-hidden="true" class="w-6 h-6 text-white"
                                              fill="none" height="24" viewBox="0 0 24 24" width="24"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -174,15 +139,15 @@ const deleteMedicine = (id) => {
               <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
                   Showing
                   <span class="font-semibold text-gray-900 dark:text-white">
-                      {{ props.medicines.from }}&ndash;{{ props.medicines.from }}
+                      {{ props.categories.from }}&ndash;{{ props.categories.from }}
                   </span>
                   of
                   <span class="font-semibold text-gray-900 dark:text-white">
-                      {{ props.medicines.total }}
+                      {{ props.categories.total }}
                   </span>
               </span>
                         <ul class="inline-flex items-stretch -space-x-px">
-                            <template v-for="link in props.medicines.links">
+                            <template v-for="link in props.categories.links">
                                 <li v-if="link.label === 'pagination.previous'">
                                     <a :href="link.url"
                                        class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
