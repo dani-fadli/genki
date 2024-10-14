@@ -1,5 +1,5 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import {Head, useForm} from '@inertiajs/vue3'
 import Navbar from "@/Components/Navbar.vue";
 import Footer from "@/Components/Footer.vue";
 
@@ -15,6 +15,16 @@ function formatRupiah(value) {
     }).format(value)
 
     return value.replace(/\s+/g, '')
+}
+
+const form = useForm({
+    medicine_id: null,
+    quantity: 1,
+})
+
+const submit = (medicine_id) => {
+    form.medicine_id = medicine_id
+    form.post(route('cart.store'))
 }
 </script>
 
@@ -142,6 +152,31 @@ function formatRupiah(value) {
                     </div>
                 </div>
             </div>
+            <div v-if="$page.props.flash.error"
+                 id="alert-error"
+                 class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                 role="alert">
+                <svg aria-hidden="true" class="flex-shrink-0 w-4 h-4" fill="currentColor"
+                     viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">Info</span>
+                <div class="ms-3 text-sm font-medium">
+                    {{ $page.props.flash.error }}
+                </div>
+                <button aria-label="Close"
+                        class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+                        data-dismiss-target="#alert-error" type="button">
+                    <span class="sr-only">Close</span>
+                    <svg aria-hidden="true" class="w-3 h-3" fill="none" viewBox="0 0 14 14"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" stroke="currentColor" stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
             <!-- Medicine Cards-->
             <div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
                 <div
@@ -185,19 +220,23 @@ function formatRupiah(value) {
                                 {{ formatRupiah(medicine.price) }}
                             </p>
 
-                            <button
-                                class="inline-flex items-center rounded-full bg-green-700 px-3 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                                type="button">
-                                <svg aria-hidden="true" class="w-6 h-6 text-white"
-                                     fill="none" height="24" viewBox="0 0 24 24" width="24"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
-                                        stroke="currentColor" stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"/>
-                                </svg>
-                            </button>
+                            <form @submit.prevent="submit(medicine.id)">
+                                <input v-model="form.medicine_id" name="medicine_id" type="hidden">
+                                <input v-model="form.quantity" name="quantity" type="hidden">
+                                <button
+                                    class="inline-flex items-center rounded-full bg-green-700 px-3 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                    type="submit">
+                                    <svg aria-hidden="true" class="w-6 h-6 text-white"
+                                         fill="none" height="24" viewBox="0 0 24 24" width="24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
+                                            stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"/>
+                                    </svg>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

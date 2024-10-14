@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\MedicineController;
@@ -30,15 +31,16 @@ Route::get('/prescription', function () {
     return Inertia::render('Prescription');
 })->name('prescription');
 
-Route::group([
-    'prefix' => 'dashboard',
-    'middleware' => ['auth:sanctum', config('jetstream.auth_session'), 'verified']
-], function () {
-    Route::get('/', fn() => Inertia::render('Dashboard'))->name('dashboard');
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', fn() => Inertia::render('Dashboard'))->name('dashboard');
 
-    // Manage medicine category
-    Route::resource('category', CategoryController::class)->names('dashboard.category');
+        // Manage medicine category
+        Route::resource('category', CategoryController::class)->names('dashboard.category');
 
-    // Manage medicine
-    Route::resource('medicine', MedicineController::class)->names('dashboard.medicine');
+        // Manage medicine
+        Route::resource('medicine', MedicineController::class)->names('dashboard.medicine');
+    });
+
+    Route::resource('cart', CartController::class)->names('cart');
 });

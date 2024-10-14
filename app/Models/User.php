@@ -10,6 +10,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use MongoDB\Laravel\Auth\User as Authenticatable;
 use MongoDB\Laravel\Relations\BelongsToMany;
+use MongoDB\Laravel\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -64,14 +65,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the attributes that should be cast.
+     * One user has many carts
      *
-     * @return array
+     * @return \MongoDB\Laravel\Relations\HasMany
      */
-    protected function casts(): array
+    public function carts(): HasMany
     {
-        return [
-            'email_verified_at' => 'datetime',
-        ];
+        return $this->hasMany(Cart::class);
     }
 }

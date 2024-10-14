@@ -1,16 +1,44 @@
 <script setup>
 import NavLink from '@/Components/NavLink.vue';
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('myCartDropdownButton1').click();
 });
+
+const carts = ref([]);
+
+function formatRupiah(value) {
+    value = Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(value)
+
+    return value.replace(/\s+/g, '')
+}
+
+const getCarts = async () => {
+    try {
+        const response = await axios.get(route('api.carts.get'), {
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+
+        carts.value = response.data.carts; // Assuming the cart items are returned in 'cart'
+    } catch (error) {
+        console.error('Failed to fetch cart items:', error);
+    }
+}
 
 onMounted(() => {
     const script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js";
     script.async = true;
     document.head.appendChild(script);
+
+    getCarts()
 });
 </script>
 
@@ -18,7 +46,6 @@ onMounted(() => {
     <nav class="bg-white dark:bg-gray-800 antialiased">
         <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-4">
             <div class="flex items-center justify-between">
-
                 <div class="flex items-center space-x-8">
                     <div class="shrink-0">
                         <a href="#">
@@ -67,10 +94,10 @@ onMounted(() => {
                                     stroke-width="2"/>
                             </svg>
                             <span class="hidden sm:flex">Keranjang</span>
-                            <span
-                                class="ml-1 bg-red-100 text-red-800 text-xs font-medium p-1 rounded-full dark:bg-red-900 dark:text-red-300">
-                            99+
-                        </span>
+                            <span v-if="carts.length > 0"
+                                  class="ml-1 bg-red-100 text-red-800 text-xs font-medium py-1.5 px-2.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                                {{ carts.length }}
+                            </span>
                             <svg aria-hidden="true" class="hidden sm:flex w-4 h-4 text-gray-900 dark:text-white ms-1"
                                  fill="none" height="24" viewBox="0 0 24 24" width="24"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -82,16 +109,21 @@ onMounted(() => {
                     </div>
                     <div id="myCartDropdown1"
                          class="hidden z-10 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg dark:bg-gray-800">
-                        <div class="grid grid-cols-2">
+                        <div v-for="cart in carts" class="grid grid-cols-2">
                             <div>
                                 <a class="truncate text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline"
-                                   href="#">Apple
-                                    iPhone 15</a>
-                                <p class="mt-0.5 truncate text-sm font-normal text-gray-500 dark:text-gray-400">$599</p>
+                                   href="#">
+                                    {{ cart.medicine.name }}
+                                </a>
+                                <p class="mt-0.5 truncate text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    {{ formatRupiah(cart.medicine.price) }}
+                                </p>
                             </div>
 
                             <div class="flex items-center justify-end gap-6">
-                                <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Qty: 1</p>
+                                <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">
+                                    Qty: {{ cart.quantity }}
+                                </p>
 
                                 <button
                                     class="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-600"
@@ -114,139 +146,10 @@ onMounted(() => {
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2">
-                            <div>
-                                <a class="truncate text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline"
-                                   href="#">Apple
-                                    iPad Air</a>
-                                <p class="mt-0.5 truncate text-sm font-normal text-gray-500 dark:text-gray-400">$499</p>
-                            </div>
-
-                            <div class="flex items-center justify-end gap-6">
-                                <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Qty: 1</p>
-
-                                <button
-                                    class="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-600"
-                                    data-tooltip-target="tooltipRemoveItem2a"
-                                    type="button">
-                                    <span class="sr-only"> Remove </span>
-                                    <svg aria-hidden="true" class="h-4 w-4" fill="currentColor"
-                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path clip-rule="evenodd"
-                                              d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm7.7-3.7a1 1 0 0 0-1.4 1.4l2.3 2.3-2.3 2.3a1 1 0 1 0 1.4 1.4l2.3-2.3 2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 12l2.3-2.3a1 1 0 0 0-1.4-1.4L12 10.6 9.7 8.3Z"
-                                              fill-rule="evenodd"/>
-                                    </svg>
-                                </button>
-                                <div id="tooltipRemoveItem2a"
-                                     class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
-                                     role="tooltip">
-                                    Remove item
-                                    <div class="tooltip-arrow" data-popper-arrow></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2">
-                            <div>
-                                <a class="truncate text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline"
-                                   href="#">Apple
-                                    Watch SE</a>
-                                <p class="mt-0.5 truncate text-sm font-normal text-gray-500 dark:text-gray-400">$598</p>
-                            </div>
-
-                            <div class="flex items-center justify-end gap-6">
-                                <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Qty: 2</p>
-
-                                <button
-                                    class="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-600"
-                                    data-tooltip-target="tooltipRemoveItem3b"
-                                    type="button">
-                                    <span class="sr-only"> Remove </span>
-                                    <svg aria-hidden="true" class="h-4 w-4" fill="currentColor"
-                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path clip-rule="evenodd"
-                                              d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm7.7-3.7a1 1 0 0 0-1.4 1.4l2.3 2.3-2.3 2.3a1 1 0 1 0 1.4 1.4l2.3-2.3 2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 12l2.3-2.3a1 1 0 0 0-1.4-1.4L12 10.6 9.7 8.3Z"
-                                              fill-rule="evenodd"/>
-                                    </svg>
-                                </button>
-                                <div id="tooltipRemoveItem3b"
-                                     class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
-                                     role="tooltip">
-                                    Remove item
-                                    <div class="tooltip-arrow" data-popper-arrow></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2">
-                            <div>
-                                <a class="truncate text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline"
-                                   href="#">Sony
-                                    Playstation 5</a>
-                                <p class="mt-0.5 truncate text-sm font-normal text-gray-500 dark:text-gray-400">$799</p>
-                            </div>
-
-                            <div class="flex items-center justify-end gap-6">
-                                <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Qty: 1</p>
-
-                                <button
-                                    class="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-600"
-                                    data-tooltip-target="tooltipRemoveItem4b"
-                                    type="button">
-                                    <span class="sr-only"> Remove </span>
-                                    <svg aria-hidden="true" class="h-4 w-4" fill="currentColor"
-                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path clip-rule="evenodd"
-                                              d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm7.7-3.7a1 1 0 0 0-1.4 1.4l2.3 2.3-2.3 2.3a1 1 0 1 0 1.4 1.4l2.3-2.3 2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 12l2.3-2.3a1 1 0 0 0-1.4-1.4L12 10.6 9.7 8.3Z"
-                                              fill-rule="evenodd"/>
-                                    </svg>
-                                </button>
-                                <div id="tooltipRemoveItem4b"
-                                     class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
-                                     role="tooltip">
-                                    Remove item
-                                    <div class="tooltip-arrow" data-popper-arrow></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2">
-                            <div>
-                                <a class="truncate text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline"
-                                   href="#">Apple
-                                    iMac 20"</a>
-                                <p class="mt-0.5 truncate text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    $8,997</p>
-                            </div>
-
-                            <div class="flex items-center justify-end gap-6">
-                                <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Qty: 3</p>
-
-                                <button
-                                    class="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-600"
-                                    data-tooltip-target="tooltipRemoveItem5b"
-                                    type="button">
-                                    <span class="sr-only"> Remove </span>
-                                    <svg aria-hidden="true" class="h-4 w-4" fill="currentColor"
-                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path clip-rule="evenodd"
-                                              d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm7.7-3.7a1 1 0 0 0-1.4 1.4l2.3 2.3-2.3 2.3a1 1 0 1 0 1.4 1.4l2.3-2.3 2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 12l2.3-2.3a1 1 0 0 0-1.4-1.4L12 10.6 9.7 8.3Z"
-                                              fill-rule="evenodd"/>
-                                    </svg>
-                                </button>
-                                <div id="tooltipRemoveItem5b"
-                                     class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
-                                     role="tooltip">
-                                    Remove item
-                                    <div class="tooltip-arrow" data-popper-arrow></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="mb-2 me-2 inline-flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                           href="#"
+                        <a :href="route('cart.index')"
+                           class="mb-2 me-2 inline-flex w-full items-center justify-center rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                            role="button"
-                           title=""> Proceed to Checkout </a>
+                           title="">Lihat Keranjang</a>
                     </div>
 
                     <button id="userDropdownButton1"

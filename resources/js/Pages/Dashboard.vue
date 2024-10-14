@@ -15,6 +15,14 @@ const breadcrumbs = [title]
                 {{ title }}
             </h2>
         </template>
+
+        <section class="bg-none dark:bg-gray-900 py-3">
+            <div class="px-1 mx-auto max-w-screen-2xl">
+                <h1 class="text-4xl">
+                    Selamat datang kembali, {{ $page.props.auth.user.first_name }}!
+                </h1>
+            </div>
+        </section>
     </DashboardLayout>
 </template>
 
