@@ -22,9 +22,9 @@ class MedicineController extends Controller
 
     public function indexCatalogue()
     {
-        $medicines = Medicine::all();
-
-        return inertia('Catalogue');
+        return inertia('Catalogue', [
+            'medicines' => Medicine::with('category')->paginate(10)
+        ]);
     }
 
     /**

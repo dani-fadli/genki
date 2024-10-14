@@ -1,8 +1,16 @@
 <script setup>
 import NavLink from '@/Components/NavLink.vue';
+import {onMounted} from "vue";
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('myCartDropdownButton1').click();
+});
+
+onMounted(() => {
+    const script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js";
+    script.async = true;
+    document.head.appendChild(script);
 });
 </script>
 
@@ -43,29 +51,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
 
                 <div class="flex items-center lg:space-x-2">
-
-                    <button id="myCartDropdownButton1"
-                            class="inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium leading-none text-gray-900 dark:text-white"
-                            data-dropdown-toggle="myCartDropdown1"
-                            type="button">
-          <span class="sr-only">
-            Cart
-          </span>
-                        <svg aria-hidden="true" class="w-5 h-5 lg:me-1" fill="none" height="24"
-                             viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"
-                                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2"/>
-                        </svg>
-                        <span class="hidden sm:flex">Keranjang</span>
-                        <svg aria-hidden="true" class="hidden sm:flex w-4 h-4 text-gray-900 dark:text-white ms-1"
-                             fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m19 9-7 7-7-7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="2"/>
-                        </svg>
-                    </button>
-
+                    <div>
+                        <button id="myCartDropdownButton1"
+                                class="inline-flex items-center rounded-lg justify-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium leading-none text-gray-900 dark:text-white"
+                                data-dropdown-toggle="myCartDropdown1"
+                                type="button">
+                        <span class="sr-only">
+                            Cart
+                        </span>
+                            <svg aria-hidden="true" class="w-5 h-5 lg:me-1" fill="none" height="24"
+                                 viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"
+                                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"/>
+                            </svg>
+                            <span class="hidden sm:flex">Keranjang</span>
+                            <span
+                                class="ml-1 bg-red-100 text-red-800 text-xs font-medium p-1 rounded-full dark:bg-red-900 dark:text-red-300">
+                            99+
+                        </span>
+                            <svg aria-hidden="true" class="hidden sm:flex w-4 h-4 text-gray-900 dark:text-white ms-1"
+                                 fill="none" height="24" viewBox="0 0 24 24" width="24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="m19 9-7 7-7-7" stroke="currentColor" stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"/>
+                            </svg>
+                        </button>
+                    </div>
                     <div id="myCartDropdown1"
                          class="hidden z-10 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg dark:bg-gray-800">
                         <div class="grid grid-cols-2">

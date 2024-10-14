@@ -98,7 +98,7 @@ const deleteCategory = (id) => {
                                     {{ category.name }}
                                 </th>
                                 <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ category.total_medicines }}
+                                    {{ category.medicines_count }}
                                 </td>
                                 <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ new Date(category.updated_at) }}
@@ -139,7 +139,7 @@ const deleteCategory = (id) => {
               <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
                   Showing
                   <span class="font-semibold text-gray-900 dark:text-white">
-                      {{ props.categories.from }}&ndash;{{ props.categories.from }}
+                      {{ props.categories.from }}&ndash;{{ props.categories.to }}
                   </span>
                   of
                   <span class="font-semibold text-gray-900 dark:text-white">

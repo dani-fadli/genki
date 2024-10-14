@@ -12,8 +12,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $categories = Category::with('medicines:id,category_id')->paginate(10);
+        $categories->getCollection()->transform(function ($category) {
+            $category->medicines_count = $category->medicines->count();
+            return $category;
+        });
+
         return inertia('Dashboard/Category', [
-            'categories' => Category::paginate(10)
+            'categories' => $categories
         ]);
     }
 

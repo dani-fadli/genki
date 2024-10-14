@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\MedicineController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -21,9 +22,7 @@ Route::get('/ping-mongodb', function () {
     return ['msg' => $msg];
 });
 
-Route::get('/', function () {
-    return Inertia::render('Homepage');
-})->name('homepage');
+Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 
 Route::get('/catalogue', [MedicineController::class, 'indexCatalogue'])->name('catalogue');
 

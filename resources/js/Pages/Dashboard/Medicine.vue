@@ -174,7 +174,7 @@ const deleteMedicine = (id) => {
               <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
                   Showing
                   <span class="font-semibold text-gray-900 dark:text-white">
-                      {{ props.medicines.from }}&ndash;{{ props.medicines.from }}
+                      {{ props.medicines.from }}&ndash;{{ props.medicines.to }}
                   </span>
                   of
                   <span class="font-semibold text-gray-900 dark:text-white">
