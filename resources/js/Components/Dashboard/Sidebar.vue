@@ -62,7 +62,7 @@ import SidebarItem from "@/Components/Dashboard/SidebarItem.vue";
                     </SidebarItem>
                 </li>
                 <li>
-                    <SidebarItem :href="route('dashboard.medicine.index')">
+                    <SidebarItem :href="route('dashboard.order.index')">
                         <template #icon>
                             <svg
                                 aria-hidden="true"

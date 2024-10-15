@@ -21,6 +21,13 @@ class OrderController extends Controller
         ]);
     }
 
+    public function indexDashboard(Request $request)
+    {
+        return inertia('Dashboard/Order', [
+            'orders' => Order::latest()->paginate(10)
+        ]);
+    }
+
     public function indexPaymentConfirmation(string $orderId)
     {
         return inertia('PaymentConfirmation', [
@@ -43,9 +50,22 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $order)
+    public function editDashboard($id)
     {
-        //
+        $order = Order::find($id);
+        $order->prescription_image = Storage::url($order->prescription_image);
+        return inertia('Dashboard/OrderEdit', [
+            'order' => $order,
+        ]);
+    }
+
+    public function updateDashboard(Request $request, $id)
+    {
+        Order::findOrFail($id)->update([
+            'status' => $request->status
+        ]);
+
+        return redirect(route('dashboard.order.index'));
     }
 
     /**

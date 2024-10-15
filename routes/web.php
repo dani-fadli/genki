@@ -41,6 +41,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         // Manage medicine
         Route::resource('medicine', MedicineController::class)->names('dashboard.medicine');
+
+        // Manage orders
+        Route::get('/order', [OrderController::class, 'indexDashboard'])->name('dashboard.order.index');
+        Route::get('/order/{id}', [OrderController::class, 'editDashboard'])->name('dashboard.order.edit');
+        Route::put('/order/{id}', [OrderController::class, 'updateDashboard'])->name('dashboard.order.update');
     });
 
     // Cart and order
