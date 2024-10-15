@@ -26,12 +26,13 @@ const breadcrumbs = ['Kelola Obat', title, ...props.isUpdating ? [props.medicine
 const form = useForm({
     name: "",
     price: 0,
+    stock: 0,
     category: "",
     reg_number: "",
     description: "",
     indication: "",
     contra_indication: "",
-    medicine_image: null
+    medicine_image: null,
 })
 
 const createMedicine = () => form.post(route('dashboard.medicine.store'))
@@ -41,6 +42,7 @@ onMounted(() => {
     if (props.isUpdating && props.medicine) {
         form.name = props.medicine.name
         form.price = props.medicine.price
+        form.stock = props.medicine.stock
         form.category = props.medicine.category_id
         form.reg_number = props.medicine.detail.reg_number
         form.description = props.medicine.detail.description
@@ -100,6 +102,18 @@ const handleFileChange = (event) => {
                                    min="0"
                                    name="price"
                                    placeholder="Masukkan nominal harga"
+                                   required="" type="number">
+                        </div>
+                        <div class="w-full">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="stock">
+                                Stok
+                            </label>
+                            <input id="price"
+                                   v-model="form.stock"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                   min="0"
+                                   name="stock"
+                                   placeholder="Masukkan stok"
                                    required="" type="number">
                         </div>
                         <div>
