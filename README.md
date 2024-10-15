@@ -7,7 +7,7 @@ management using Laravel and MongoDB.
 
 - Registrasi dan Login Pengguna: Pengguna (pelanggan dan apoteker) dapat mendaftar dan masuk ke dalam sistem.
 - Katalog Obat: Menampilkan daftar obat lengkap dengan deskripsi, harga, stok, dan gambar.
-- Pencarian dan Filiter Obat: Fitur pencarian berdasarkan nama, kategori, atau kondisi kesehatan.
+- Pencarian dan Filter Obat: Fitur pencarian berdasarkan nama, kategori, atau kondisi kesehatan.
 - Keranjang Belanja dan Pembayaran Online: Pengguna dapat menambahkan obat ke keranjang dan melakukan pembayaran melalui
   transfer dan melampirkan bukti transfer (integrasi payment gateway merupakan nilai plus).
 - Notifikasi Stok Obat: Apoteker mendapatkan notifikasi saat stok obat menipis.

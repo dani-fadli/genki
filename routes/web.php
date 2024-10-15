@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -42,5 +43,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::resource('medicine', MedicineController::class)->names('dashboard.medicine');
     });
 
+    // Cart and order
     Route::resource('cart', CartController::class)->names('cart');
+    Route::resource('order', OrderController::class)->names('order');
+    Route::get('/order/{id}/payment-confirmation', [OrderController::class, 'indexPaymentConfirmation'])->name('order.payment_confirmation');
+    Route::post('/order/prescription', [OrderController::class, 'storePrescription'])->name('order.store-prescription');
 });

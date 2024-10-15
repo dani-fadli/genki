@@ -29,6 +29,13 @@ const updateCart = (id, action, quantity) => {
 const deleteCart = id => {
     form.delete(route('cart.destroy', id))
 }
+const orderForm = useForm({
+    cart_ids: []
+})
+const createOrder = () => {
+    orderForm.cart_ids = props.carts.map(cart => cart.id)
+    orderForm.post(route('order.store'))
+}
 </script>
 
 <template>
@@ -385,10 +392,12 @@ const deleteCart = id => {
                                 </dd>
                             </dl>
                         </div>
-                        <a class="flex w-full items-center justify-center rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                           href="#">
+                        <button
+                            class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                            type="button"
+                            @click="createOrder">
                             Buat Pesanan
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>

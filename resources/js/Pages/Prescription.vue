@@ -1,7 +1,35 @@
 <script setup>
-import {Head} from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 import Navbar from "@/Components/Navbar.vue";
 import Footer from "@/Components/Footer.vue";
+import {ref} from "vue";
+
+const props = defineProps({
+    errors: Object,
+})
+
+const form = useForm({
+    prescription: null,
+})
+
+const previewImage = ref(null)
+
+const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    if (file) {
+        form.prescription = file
+        const reader = new FileReader()
+        reader.onload = (e) => {
+            previewImage.value = e.target.result
+        }
+        reader.readAsDataURL(file)
+    }
+    props.errors.prescription = null
+}
+
+const submit = () => {
+    form.post(route('order.store-prescription'))
+}
 </script>
 
 <template>
@@ -26,29 +54,45 @@ import Footer from "@/Components/Footer.vue";
                 </h1>
                 <p class="mb-6 text-gray-500 dark:text-gray-400"> Upload resep dokter dan apoteker kami akan memproses
                     pesanan Anda!</p>
+                <form @submit.prevent="submit">
+                    <div class="flex items-center justify-center w-full">
+                        <label
+                            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                            for="prescription">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <img
+                                    v-if="previewImage"
+                                    :src="previewImage"
+                                    alt="Preview Image"
+                                    class="max-h-40 mb-2"
+                                />
+                                <svg v-else aria-hidden="true"
+                                     class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                     fill="none" viewBox="0 0 20 16" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                        stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"/>
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span>
+                                    or drag and drop</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (maks. 1MB)</p>
+                            </div>
+                            <input id="prescription" class="hidden" type="file" @change="handleFileChange"/>
 
-                <div class="flex items-center justify-center w-full">
-                    <label
-                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                        for="dropzone-file">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg aria-hidden="true" class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                 fill="none" viewBox="0 0 20 16" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                                    stroke="currentColor" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"/>
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span>
-                                or drag and drop</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX.
-                                800x400px)</p>
-                        </div>
-                        <input id="dropzone-file" class="hidden" type="file"/>
-                    </label>
-                </div>
-
+                        </label>
+                    </div>
+                    <p v-if="errors.prescription"
+                       class="mt-2 text-xs text-red-600 dark:text-red-400">
+                        {{ errors.prescription }}
+                    </p>
+                    <button
+                        class="flex w-full mt-2 items-center justify-center rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                        type="submit">
+                        Upload Resep
+                    </button>
+                </form>
             </div>
         </div>
     </section>

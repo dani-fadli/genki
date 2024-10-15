@@ -1,6 +1,11 @@
 <script setup>
 import NavLink from '@/Components/NavLink.vue';
 import {onMounted, ref} from "vue";
+import {useForm} from "@inertiajs/vue3";
+
+const props = defineProps({
+    canLogin: Boolean,
+})
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('myCartDropdownButton1').click();
@@ -38,8 +43,12 @@ onMounted(() => {
     script.async = true;
     document.head.appendChild(script);
 
-    getCarts()
+    if (!props.canLogin) getCarts()
 });
+
+const form = useForm({})
+
+const logout = () => form.post(route('logout'))
 </script>
 
 <template>
@@ -48,7 +57,7 @@ onMounted(() => {
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-8">
                     <div class="shrink-0">
-                        <a href="#">
+                        <a :href="route('homepage')">
                             <img alt=""
                                  class="block w-auto h-12 dark:hidden"
                                  src="/assets/genki_logo_full.png">
@@ -174,43 +183,26 @@ onMounted(() => {
                     <div id="userDropdown1"
                          class="hidden z-10 w-56 divide-y divide-gray-100 overflow-hidden overflow-y-auto rounded-lg bg-white antialiased shadow dark:divide-gray-600 dark:bg-gray-700">
                         <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">
-                            <li><a
+                            <li v-if="canLogin"><a
+                                :href="route('login')"
                                 class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                href="#"
                                 title="">
-                                My Account </a></li>
-                            <li><a
+                                Login </a></li>
+                            <li v-else><a
+                                :href="route('order.index')"
                                 class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                href="#"
                                 title="">
-                                My Orders </a></li>
-                            <li><a
-                                class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                href="#"
-                                title="">
-                                Settings </a></li>
-                            <li><a
-                                class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                href="#"
-                                title="">
-                                Favourites </a></li>
-                            <li><a
-                                class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                href="#"
-                                title="">
-                                Delivery Addresses </a></li>
-                            <li><a
-                                class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                                href="#"
-                                title="">
-                                Billing Data </a></li>
+                                Pesanan Saya </a></li>
                         </ul>
 
-                        <div class="p-2 text-sm font-medium text-gray-900 dark:text-white">
-                            <a class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
-                               href="#"
-                               title="">
-                                Sign Out </a>
+                        <div v-if="canLogin" class="p-2 text-sm font-medium text-gray-900 dark:text-white">
+                            <form @submit.prevent="logout">
+                                <button
+                                    class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"
+                                    type="submit">
+                                    Sign Out
+                                </button>
+                            </form>
                         </div>
                     </div>
 
