@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Medicine;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -81,7 +82,7 @@ class MedicineController extends Controller
             'category_id' => $request->category,
             'price' => $request->price,
             'rating' => 0,
-            'stock' => 0,
+            'stock' => $request->stock,
             'detail' => (object)$request->only([
                 'description', 'reg_number', 'indication', 'contra_indication'
             ]),
@@ -111,6 +112,7 @@ class MedicineController extends Controller
 
         return inertia('MedicineDetail', [
             'medicine' => $medicine,
+            'reviews' => Review::where('medicine_id', $medicine->id)->get(),
         ]);
     }
 
@@ -138,6 +140,7 @@ class MedicineController extends Controller
             'name' => $request->name,
             'category_id' => $request->category,
             'price' => $request->price,
+            'stock' => $request->stock,
             'detail' => (object)$request->only([
                 'description', 'reg_number', 'indication', 'contra_indication'
             ]),
