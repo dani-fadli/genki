@@ -37,14 +37,7 @@ const deleteMedicine = (id) => {
                     <div
                         class="flex flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
                         <div class="flex items-center flex-1 space-x-4">
-                            <h5>
-                                <span class="text-gray-500">All Products:</span>
-                                <span class="dark:text-white">123456</span>
-                            </h5>
-                            <h5>
-                                <span class="text-gray-500">Total sales:</span>
-                                <span class="dark:text-white">$88.4k</span>
-                            </h5>
+                            <p class="text-2xl">Daftar Obat</p>
                         </div>
                         <div
                             class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
@@ -103,7 +96,7 @@ const deleteMedicine = (id) => {
                                 <th class="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                     scope="row">
                                     <img
-                                        :src="medicine.image_urls && medicine.image_urls.length > 0 ? medicine.image_urls[0] : '/assets/default_medicine.png'"
+                                        :src="medicine.medicine_image"
                                         alt="Medicine"
                                         class="w-auto h-8 mr-3">
                                     {{ medicine.name }}

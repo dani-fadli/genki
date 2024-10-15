@@ -183,10 +183,10 @@ const submit = (medicine_id) => {
                     v-for="medicine in props.medicines.data"
                     class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                     <div class="h-56 w-full">
-                        <a href="#">
-                            <img alt=""
-                                 class="mx-auto h-full"
-                                 src="/assets/default_medicine.png"/>
+                        <a :href="route('medicine.show', medicine.id)">
+                            <img :src="medicine.medicine_image"
+                                 alt=""
+                                 class="mx-auto h-full"/>
                         </a>
                     </div>
                     <div class="pt-6">
@@ -197,8 +197,8 @@ const submit = (medicine_id) => {
                             </span>
                         </div>
 
-                        <a class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white"
-                           href="#">{{ medicine.name }}</a>
+                        <a :href="route('medicine.show', medicine.id)"
+                           class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">{{ medicine.name }}</a>
 
                         <div class="mt-2 flex items-center gap-2">
                             <div class="flex items-center">

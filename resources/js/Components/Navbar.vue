@@ -195,7 +195,7 @@ const logout = () => form.post(route('logout'))
                                 Pesanan Saya </a></li>
                         </ul>
 
-                        <div v-if="canLogin" class="p-2 text-sm font-medium text-gray-900 dark:text-white">
+                        <div v-if="!canLogin" class="p-2 text-sm font-medium text-gray-900 dark:text-white">
                             <form @submit.prevent="logout">
                                 <button
                                     class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"

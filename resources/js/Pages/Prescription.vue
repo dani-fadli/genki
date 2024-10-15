@@ -80,7 +80,6 @@ const submit = () => {
                                 <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (maks. 1MB)</p>
                             </div>
                             <input id="prescription" class="hidden" type="file" @change="handleFileChange"/>
-
                         </label>
                     </div>
                     <p v-if="errors.prescription"

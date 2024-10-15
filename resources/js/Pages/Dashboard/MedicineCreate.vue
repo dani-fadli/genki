@@ -2,7 +2,7 @@
 
 import {Head, useForm} from "@inertiajs/vue3"
 import DashboardLayout from "@/Layouts/DashboardLayout.vue"
-import {onMounted} from "vue"
+import {onMounted, ref} from "vue"
 
 const props = defineProps({
     medicine: {
@@ -16,7 +16,8 @@ const props = defineProps({
     categories: {
         type: Object,
         default: null
-    }
+    },
+    errors: Object,
 })
 
 const title = props.isUpdating ? "Edit Obat" : "Tambah Obat"
@@ -30,6 +31,7 @@ const form = useForm({
     description: "",
     indication: "",
     contra_indication: "",
+    medicine_image: null
 })
 
 const createMedicine = () => form.post(route('dashboard.medicine.store'))
@@ -46,6 +48,21 @@ onMounted(() => {
         form.contra_indication = props.medicine.detail.contra_indication
     }
 })
+
+const previewImage = ref(null)
+
+const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    if (file) {
+        form.medicine_image = file
+        const reader = new FileReader()
+        reader.onload = (e) => {
+            previewImage.value = e.target.result
+        }
+        reader.readAsDataURL(file)
+    }
+    props.errors.medicine_image = null
+}
 </script>
 
 <template>
@@ -147,6 +164,41 @@ onMounted(() => {
                                    placeholder="Masukkan kontra indikasi obat"
                                    type="text">
                         </div>
+
+                        <div class="flex flex-col justify-center w-full">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                   for="contra_indication">
+                                Foto Produk
+                            </label>
+                            <label
+                                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                                for="medicine_image">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <img
+                                        v-if="previewImage"
+                                        :src="previewImage"
+                                        alt="Preview Image"
+                                        class="max-h-40 mb-2"
+                                    />
+                                    <svg aria-hidden="true" class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                         fill="none" viewBox="0 0 20 16" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                            stroke="currentColor" stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
+                                        class="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (maks. 1MB)</p>
+                                </div>
+                                <input id="medicine_image" class="hidden" type="file" @change="handleFileChange"/>
+                            </label>
+                        </div>
+                        <p v-if="errors.medicine_image"
+                           class="mt-2 text-xs text-red-600 dark:text-red-400">
+                            {{ errors.medicine_image }}
+                        </p>
                     </div>
                     <button
                         class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-green-400 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"

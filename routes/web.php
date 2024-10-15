@@ -27,6 +27,7 @@ Route::get('/ping-mongodb', function () {
 Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 
 Route::get('/catalogue', [MedicineController::class, 'indexCatalogue'])->name('catalogue');
+Route::get('/medicine/{id}', [MedicineController::class, 'show'])->name('medicine.show');
 
 Route::get('/prescription', function () {
     return Inertia::render('Prescription');

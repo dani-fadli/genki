@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Medicine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MedicineController extends Controller
 {
@@ -14,6 +16,12 @@ class MedicineController extends Controller
     public function index()
     {
         $medicines = Medicine::with('category')->paginate(10);
+        $medicines->getCollection()->transform(function ($medicine) {
+            $medicine->medicine_image = $medicine->medicine_image
+                ? Storage::url($medicine->medicine_image)
+                : '/assets/default_medicine.png';
+            return $medicine;
+        });
 
         return inertia('Dashboard/Medicine', [
             'medicines' => $medicines
@@ -22,8 +30,16 @@ class MedicineController extends Controller
 
     public function indexCatalogue()
     {
+        $medicines = Medicine::with('category')->paginate(10);
+        $medicines->getCollection()->transform(function ($medicine) {
+            $medicine->medicine_image = $medicine->medicine_image
+                ? Storage::url($medicine->medicine_image)
+                : '/assets/default_medicine.png';
+            return $medicine;
+        });
+
         return inertia('Catalogue', [
-            'medicines' => Medicine::with('category')->paginate(10)
+            'medicines' => $medicines,
         ]);
     }
 
@@ -32,6 +48,14 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'medicine_image' => ['file', 'mimes:jpg,png,jpeg', 'max:1000'],
+        ]);
+
+        $file = $request->file('medicine_image');
+        $filename = 'medicine_' . Str::random(10) . '_' . time() . '.' . $file->getClientOriginalExtension();
+        if ($file->isValid()) $file->storeAs('', $filename);
+
         Medicine::create([
             'name' => $request->name,
             'category_id' => $request->category,
@@ -40,7 +64,8 @@ class MedicineController extends Controller
             'stock' => 0,
             'detail' => (object)$request->only([
                 'description', 'reg_number', 'indication', 'contra_indication'
-            ])
+            ]),
+            'medicine_image' => $filename,
         ]);
 
         return redirect()->route('dashboard.medicine.index');
@@ -61,7 +86,12 @@ class MedicineController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $medicine = Medicine::find($id);
+        $medicine->medicine_image = $medicine->medicine_image ? Storage::url($medicine->medicine_image) : '/assets/default_medicine.png';
+
+        return inertia('MedicineDetail', [
+            'medicine' => $medicine,
+        ]);
     }
 
     /**
@@ -69,6 +99,9 @@ class MedicineController extends Controller
      */
     public function edit(Medicine $medicine)
     {
+        if ($medicine->medicine_image)
+            $medicine->medicine_image = Storage::url($medicine->medicine_image);
+
         return inertia('Dashboard/MedicineCreate', [
             'medicine' => $medicine,
             'isUpdating' => true,
