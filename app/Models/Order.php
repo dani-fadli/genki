@@ -19,5 +19,11 @@ class Order extends Model
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:i',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
+
+    public function medicines()
+    {
+        return $this->belongsTomany(Medicine::class, 'medicines', '_id', 'medicines.medicine_id');
+    }
 }
