@@ -28,9 +28,27 @@ class MedicineController extends Controller
         ]);
     }
 
-    public function indexCatalogue()
+    public function indexCatalogue(Request $request)
     {
-        $medicines = Medicine::with('category')->paginate(10);
+        $category = null;
+        $medicines = Medicine::query()
+            ->when(!empty($request->search), function ($qM) use ($request) {
+                return $qM->where(function ($qSearch) use ($request) {
+                    return $qSearch->where('name', 'like', "%$request->search%")
+                        ->orWhere('detail.indication', 'like', "%$request->search%")
+                        ->orWhereHas('category', function ($qCategory) use ($request) {
+                            return $qCategory->where('name', 'like', "%$request->search%");
+                        });
+                });
+            })
+            ->when(!empty($request->category_id), function ($qM) use ($request, &$category) {
+                $category = Category::find($request->category_id);
+                return $qM->whereHas('category', function ($qCategory) use ($request) {
+                    return $qCategory->where('id', $request->category_id);
+                });
+            })
+            ->with('category')
+            ->paginate(10);
         $medicines->getCollection()->transform(function ($medicine) {
             $medicine->medicine_image = $medicine->medicine_image
                 ? Storage::url($medicine->medicine_image)
@@ -40,6 +58,8 @@ class MedicineController extends Controller
 
         return inertia('Catalogue', [
             'medicines' => $medicines,
+            'search' => $request->search,
+            'category' => $category?->name,
         ]);
     }
 

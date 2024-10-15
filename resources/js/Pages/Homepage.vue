@@ -1,11 +1,19 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import {Head, useForm} from '@inertiajs/vue3'
 import Navbar from "@/Components/Navbar.vue"
 import Footer from "@/Components/Footer.vue";
 
 const props = defineProps({
     categories: Object
 })
+
+const form = useForm({
+    search: "",
+})
+
+const search = () => {
+    form.get('catalogue')
+}
 </script>
 
 <template>
@@ -33,7 +41,7 @@ const props = defineProps({
                     Dapatkan rekomendasi obat sesuai kebutuhan Anda!</p>
 
 
-                <form>
+                <form @submit.prevent="search">
                     <label class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
                            for="search">Search</label>
                     <div class="relative">
@@ -46,9 +54,10 @@ const props = defineProps({
                             </svg>
                         </div>
                         <input id="search"
+                               v-model="form.search"
                                class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               placeholder="Cari obat berdasarkan nama, indikasi, dsb."
-                               required type="search"/>
+                               placeholder="Cari obat berdasarkan nama, kategori, indikasi, dsb." required
+                               type="search"/>
                         <button
                             class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             type="submit">
@@ -88,7 +97,7 @@ const props = defineProps({
 
             <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <a v-for="category in props.categories"
-                   :href="route('catalogue')"
+                   :href="route('catalogue', {category_id: category.id})"
                    class="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                     <svg aria-hidden="true" class="w-6 h-6 text-gray-800 dark:text-white"
                          fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">

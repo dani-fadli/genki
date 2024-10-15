@@ -5,6 +5,8 @@ import Footer from "@/Components/Footer.vue";
 
 const props = defineProps({
     medicines: Object,
+    search: null,
+    category: null,
 })
 
 function formatRupiah(value) {
@@ -37,119 +39,17 @@ const submit = (medicine_id) => {
             <!-- Heading & Filters -->
             <div class="mb-4 items-end justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
                 <div>
-                    <nav aria-label="Breadcrumb" class="flex">
-                        <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-                            <li class="inline-flex items-center">
-                                <a class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white"
-                                   href="#">
-                                    <svg aria-hidden="true" class="me-2.5 h-3 w-3" fill="currentColor"
-                                         viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
-                                    </svg>
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <div class="flex items-center">
-                                    <svg aria-hidden="true" class="h-5 w-5 text-gray-400 rtl:rotate-180"
-                                         fill="none" height="24" viewBox="0 0 24 24" width="24"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="m9 5 7 7-7 7" stroke="currentColor" stroke-linecap="round"
-                                              stroke-linejoin="round" stroke-width="2"/>
-                                    </svg>
-                                    <a class="ms-1 text-sm font-medium text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white md:ms-2"
-                                       href="#">Products</a>
-                                </div>
-                            </li>
-                            <li aria-current="page">
-                                <div class="flex items-center">
-                                    <svg aria-hidden="true" class="h-5 w-5 text-gray-400 rtl:rotate-180"
-                                         fill="none" height="24" viewBox="0 0 24 24" width="24"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="m9 5 7 7-7 7" stroke="currentColor" stroke-linecap="round"
-                                              stroke-linejoin="round" stroke-width="2"/>
-                                    </svg>
-                                    <span class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ms-2">Electronics</span>
-                                </div>
-                            </li>
-                        </ol>
-                    </nav>
-                    <h2 class="mt-3 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Electronics</h2>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button
-                        class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto"
-                        data-modal-target="filterModal" data-modal-toggle="filterModal"
-                        type="button">
-                        <svg aria-hidden="true" class="-ms-0.5 me-2 h-4 w-4" fill="none"
-                             height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"
-                                stroke="currentColor" stroke-linecap="round"
-                                stroke-width="2"/>
-                        </svg>
-                        Filters
-                        <svg aria-hidden="true" class="-me-0.5 ms-2 h-4 w-4" fill="none"
-                             height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m19 9-7 7-7-7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="2"/>
-                        </svg>
-                    </button>
-                    <button id="sortDropdownButton1"
-                            class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto"
-                            data-dropdown-toggle="dropdownSort1"
-                            type="button">
-                        <svg aria-hidden="true" class="-ms-0.5 me-2 h-4 w-4" fill="none"
-                             height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 4v16M7 4l3 3M7 4 4 7m9-3h6l-6 6h6m-6.5 10 3.5-7 3.5 7M14 18h4"
-                                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="2"/>
-                        </svg>
-                        Sort
-                        <svg aria-hidden="true" class="-me-0.5 ms-2 h-4 w-4" fill="none"
-                             height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m19 9-7 7-7-7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="2"/>
-                        </svg>
-                    </button>
-                    <div id="dropdownSort1"
-                         class="z-50 hidden w-40 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
-                         data-popper-placement="bottom">
-                        <ul aria-labelledby="sortDropdownButton"
-                            class="p-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                            <li>
-                                <a class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                   href="#">
-                                    The most popular </a>
-                            </li>
-                            <li>
-                                <a class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                   href="#">
-                                    Newest </a>
-                            </li>
-                            <li>
-                                <a class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                   href="#">
-                                    Increasing price </a>
-                            </li>
-                            <li>
-                                <a class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                   href="#">
-                                    Decreasing price </a>
-                            </li>
-                            <li>
-                                <a class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                   href="#">
-                                    No. reviews </a>
-                            </li>
-                            <li>
-                                <a class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                                   href="#">
-                                    Discount % </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <h2 v-if="props.search"
+                        class="mt-3 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+                        Hasil pencarian untuk "{{ props.search }}"
+                    </h2>
+                    <h2 v-else-if="props.category"
+                        class="mt-3 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+                        Produk berdasarkan kategori "{{ props.category }}"
+                    </h2>
+                    <h2 v-else class="mt-3 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+                        Semua Produk
+                    </h2>
                 </div>
             </div>
             <div v-if="$page.props.flash.error"
@@ -198,7 +98,9 @@ const submit = (medicine_id) => {
                         </div>
 
                         <a :href="route('medicine.show', medicine.id)"
-                           class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">{{ medicine.name }}</a>
+                           class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">{{
+                                medicine.name
+                            }}</a>
 
                         <div class="mt-2 flex items-center gap-2">
                             <div class="flex items-center">
@@ -212,7 +114,9 @@ const submit = (medicine_id) => {
                             <p class="text-sm font-medium text-gray-900 dark:text-white">{{
                                     medicine.rating === 0 ? 'N/A' : medicine.rating
                                 }}</p>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">(455)</p>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                ({{ medicine.reviews_count ?? 0 }})
+                            </p>
                         </div>
 
                         <div class="mt-2 flex items-center justify-between gap-4">
